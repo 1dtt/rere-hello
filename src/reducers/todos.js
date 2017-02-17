@@ -1,22 +1,40 @@
+import {
+  ADD_TODO,
+  TOGGLE_TODO
+} from '../actions';
+
+const todo = (state ={}, action) => {
+  switch(action.type) {
+    case ADD_TODO:
+      return {
+        id: action.id,
+        text: action.text,
+        completed: false,
+      };
+
+    case TOGGLE_TODO:
+      return Object.assign({}, state, {completed: !state.completed});
+
+    default:
+      return state;
+  }
+}
+
 const todos = (state = [], action) => {
   switch(action.type) {
-    case 'ADD_TODO':
+    case ADD_TODO:
       return [
         ...state,
-        {
-          id: action.id,
-          text: action.text,
-          completed: false,
-        },
+        todo(undefined, action)
       ];
 
-    case 'TOGGLE_TODO':
+    case TOGGLE_TODO:
       return state.map((s) => {
         if(s.id !== action.id) {
           return s;
         }
 
-        return Object.assign({}, s, {completed: !s.completed});
+        return todo(s, action);
       });
 
     default:
